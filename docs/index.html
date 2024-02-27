@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-LoRA Composition for Image Generation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/tangram.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav> -->
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Multi-LoRA Composition for Image Generation</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://maszhongming.github.io">Ming Zhong</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=S6OFEFEAAAAJ&hl=en">Yelong Shen</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/shuowa">Shuohang Wang</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://adamlu123.github.io">Yadong Lu</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://yzjiao.github.io">Yizhu Jiao</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ozyyshr.github.io">Siru Ouyang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://plusross.github.io">Donghan Yu</a><sup>2</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://hanj.cs.illinois.edu">Jiawei Han</a><sup>1</sup>
+            </span>
+            <span class="author-block">
+              <a href="https://www.microsoft.com/en-us/research/people/wzchen">Weizhu Chen</a><sup>2</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Illinois Urbana-Champaign,</span>
+            <span class="author-block"><sup>2</sup>Microsoft Corporation</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2402.16843"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- <span class="link-block">
+                <a href="https://arxiv.org/abs/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span> -->
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/maszhongming/Multi-LoRA-Composition"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://drive.google.com/file/d/1SuwRgV1LtEud8dfjftnw-zxBMgzSCwIT/view?usp=sharing"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>ComposLoRA</span>
+                </a>
+              </span>
+              <!-- Twitter Link. -->
+              <span class="link-block">
+                <a href="https://x.com/MingZhong_/status/1762347881812443575?s=20"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-twitter"></i>
+                  </span>
+                  <span>Twitter</span></a>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+        <div class="content has-text-justified">
+          This project explores new methods for text-to-image generation, with a focus on the integration of multiple Low-Rank Adaptations (LoRAs) to create highly customized and detailed images. We present <strong>LoRA Switch</strong> and <strong>LoRA Composite</strong>, approaches that aim to surpass traditional techniques in terms of accuracy and image quality, especially in complex compositions.
+          <br><br><strong>Project Features</strong>: 
+          <ul>
+            <li><strong>🚀 Training-Free Methods</strong>
+              <ul>
+              <li> LoRA Switch and LoRA Composite enable dynamic and precise integration of multiple LoRAs without fine-tuning.</li> 
+              <li> Unlike methods that merge LoRA weights, ours focuses on the decoding process, keeping all LoRA weights intact.</li>
+              </ul>
+            </li> 
+            <li><strong>📊 ComposLoRA Testbed</strong>
+              <ul>
+              <li> A new comprehensive platform, featuring 480 composition sets and 22 pre-trained LoRAs across six categories.</li> 
+              <li> ComposLoRA is designed for the quantitative evaluation of LoRA-based composable image generation tasks.</li>
+              </ul>
+            </li>
+            <li><strong>📝 GPT-4V-based Evaluator</strong>
+              <ul>
+              <li>We propose using GPT-4V as an evaluator to assess the efficacy of compositions and the quality of images.</li>
+              <li>This evaluator has demonstrated a better correlation with human judgments.</li>
+              </ul>
+            </li>
+            <li><strong>🏆 Superior Performance</strong>
+              <ul>
+              <li>Both automated and human evaluations show that our approaches substantially outperform the prevalent LoRA Merge.</li>
+              <li>Our methods exhibit a more significant advantage when generating complex compositions.</li>
+              </ul>
+            </li>
+            <li><strong>🕵️‍♂️ Detailed Analysis</strong>
+              <ul>
+              <li>We delve deeply into the scenarios where each method excels.</li>
+              <li>We explore the potential bias associated with using GPT-4V for evaluation.</li>
+              </ul>
+            </li>
+          </ul>
+         </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline width="100%">
+        <source src="./static/videos/intro_video_1.mp4"
+                type="video/mp4">
+      </video>
+      <video id="teaser" autoplay muted loop playsinline width="100%">
+        <source src="./static/videos/intro_video_2.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        Multi-LoRA composition techniques effectively blend different elements into a cohesive image. Unlike the conventional LoRA Merge approach, which can lead to detail loss and image distortion as more LoRAs are added, our methods retain the accuracy of each element and the overall image quality.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Results. -->
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-3">Methods of Multi-LoRA Composition</h2>
+        <p align="center">
+        <img src="./static/images/method.png" class="center">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li><strong>LoRA Merge:</strong>
+              <ul>
+              <li>Prevalent approach to integrating multiple elements in a unified way in an image.</li> 
+              <li>It is realized by linearly combining multiple LoRAs to synthesize a unified LoRA, subsequently plugged into the text-to-image model.</li>
+              <li>LoAR Merge completely overlooks the interaction with the diffusion model during the generative process, resulting in the deformation of the hamburger and fingers in the Figure.</li>
+              </ul>
+            </li>
+            <li><strong>LoRA Switch (LoRA-S):</strong>
+              <ul>
+              <li>To explore activating a single LoRA in each denoising step, we propose LoRA Switch.</li>
+              <li>This method introduces a dynamic adaptation mechanism within diffusion models by sequentially activating individual LoRAs at designated intervals throughout the decoding process.</li>
+              <li>As illustrated in the Figure, each LoRA is represented by a unique color corresponding to a specific element, with only one LoRA engaged per denoising step.</li>
+              </ul>
+            </li>
+            <li><strong>LoRA Composite (LoRA-C):</strong>
+              <ul>
+              <li>To explore incorporating all LoRAs at each timestep without merging weight matrices, we propose LoRA Composite.</li>
+              <li>It involves calculating both unconditional and conditional score estimates for each LoRA individually at each step.</li>
+              <li>By aggregating these scores, the technique ensures balanced guidance throughout the image generation process, facilitating the cohesive integration of all elements represented by different LoRAs.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Results. -->
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-3">GPT-4V-based Evaluator</h2>
+        <p align="center">
+        <img src="./static/images/gpt4v.png" class="center" width="50%">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li>While existing metrics can calculate the alignment between text and images, they fall short in assessing the intricacies of specific elements within an image and the quality of their composition.</li>
+            <li>We employ a comparative evaluation method, utilizing GPT-4V to rate generated images across two dimensions: composition quality and image quality.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Results. -->
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-3">Experimental Results</h2>
+        <p align="center">
+        <img src="./static/images/results.png" class="center" width="100%">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li>Our proposed method consistently outperforms LoRA Merge across all configurations and in both dimensions, with the margin of superiority increasing as the number of LoRAs grows.</li>
+            <li>LoRA Switch shows superior performance in composition quality, whereas LoRA Composite excels in image quality.</li>
+            <li>The task of compositional image generation remains highly challenging, especially as the number of elements to be composed increases.</li>
+          </ul>
+        </div>
+        <p align="center">
+          <img src="./static/images/human_eval.png" class="center" width="50%">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li>Human evaluations aligh with GPT-4V's findings.</li>
+            <li>GPT-4V-based evaluator we adopt shows substantially higher correlations with human judgments, affirming the validity of our evaluation framework.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Results. -->
+    <div class="columns is-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-3">Analysis</h2>
+        <p align="center">
+        <img src="./static/images/style_analysis.png" class="center" width="70%">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li>LoRA Switch is more adept at composing elements in realistic-style images.</li>
+            <li>LoRA Composite shows a stronger performance in anime-style imagery.</li>
+          </ul>
+        </div>
+        <p align="center">
+          <img src="./static/images/switch_analysis.png" class="center" width="70%">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li>The efficiency of the LoRA Switch improves progressively with increased step size, reaching peak performance at 5.</li>
+            <li>The initial choice of LoRA in the activation sequence clearly influences overall performance, while alterations in the subsequent order have minimal impact.</li>
+          </ul>
+        </div>
+        <p align="center">
+          <img src="./static/images/bias_analysis.png" class="center" width="70%">
+        </p>
+        <div class="content has-text-justified">
+          <ul>
+            <li>GPT-4V exhibits significant positional bias in comparative evaluation.</li>
+            <li>This bias varies depending on the input position of the image and the dimension of the evaluation.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{zhong2024multi,
+      title={Multi-LoRA Composition for Image Generation},
+      author={Zhong, Ming and Shen, Yelong and Wang, Shuohang and Lu, Yadong and Jiao, Yizhu and Ouyang, Siru and Yu, Donghan and Han, Jiawei and Chen, Weizhu},
+      journal={arXiv preprint arXiv:2402.16843},
+      year={2024}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-6">
+        <div class="content">
+          <p>
+            The source code of this webpage is based on the <a href="https://github.com/nerfies/nerfies.github.io/">
+              Nerfies</a> project webpage.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

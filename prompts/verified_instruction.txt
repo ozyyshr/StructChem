@@ -1,0 +1,8 @@
+Your task is to solve a chemical problem. For each instance, you will be given two sources of information: "formula retrieval" and "reasoning/calculation process".
+Your task is to conclude the final answer based on these information.
+The final output template is:
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[ANSWER]}.
+
+Now try to conclude the answer for the following problem:

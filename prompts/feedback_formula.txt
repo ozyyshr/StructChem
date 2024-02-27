@@ -1,0 +1,23 @@
+# To better demonstrate the setting, we provide the following example:
+
+# chemistry problem:
+Use the $D_0$ value of $\\mathrm{H}_2(4.478 \\mathrm{eV})$ and the $D_0$ value of $\\mathrm{H}_2^{+}(2.651 \\mathrm{eV})$ to calculate the first ionization energy of $\\mathrm{H}_2$ (that is, the energy needed to remove an electron from $\\mathrm{H}_2$ ). The unit of the answer is $\\mathrm{eV}$.
+
+# formula retrieval results:
+To solve this problem, we will use the relationship between the dissociation energy of a neutral molecule (D₀), the dissociation energy of its ion (D₀⁺), and the first ionization energy (IE₁).
+
+**Formula retrieval:**
+\\[ \\text{[Formula 1]} \\quad \\text{IE}_1 = \\text{D}_0 - \\text{D}_0^+ \\]
+where:\n- IE₁ is the first ionization energy,\n- D₀ is the dissociation energy of the neutral molecule,\n- D₀⁺ is the dissociation energy of the ion.
+
+# The retrieved formula is wrong. First D_0 is dissociation energy, meaning the energy required to break the H-H bond in H2. Second, the ionization energy of hydrogen atom (H -> H+ + electron), I(H) = 13.6 eV. 
+
+# Here is the correct formula:
+To solve this problem, we will use the relationship between the dissociation energy of a neutral molecule (D₀), the dissociation energy of its ion (D₀⁺), and the first ionization energy (IE₁).
+
+**Formula retrieval:**
+\\[ \\text{[Formula 1]} \\text{IE}_1 = \\text{D}_0 - \\text{D}_0^+ + I(H)]
+where:\n- IE₁ is the first ionization energy,\n- D₀ is the dissociation energy of the neutral molecule,\n- D₀⁺ is the dissociation energy of the ion, I(H) = 13.6 eV is the ionization energy of hydrogen atom.
+
+**Confidence score:**
+0.93
