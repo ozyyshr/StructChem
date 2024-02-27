@@ -1,6 +1,0 @@
-
-import math
-
-c = 1 / math.sqrt(2)
-
-print(c)

@@ -1,4 +1,0 @@
-
-ways = 9/24
-
-print(ways)

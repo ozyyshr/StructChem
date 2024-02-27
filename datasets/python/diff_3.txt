@@ -1,8 +1,0 @@
-
-import numpy as np
-
-# Calculation
-delta = -np.arctan(np.sqrt(3)/4)
-
-print(delta)
-
