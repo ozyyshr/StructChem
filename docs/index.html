@@ -110,7 +110,7 @@
 
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>University of Illinois Urbana-Champaign, <sup>2</sup>Shanghai Jiao Tong University</span>
-            <span class="author-block"><sup>3</sup>New York University, <sup>4</sup>University of Washington</span>
+            <span class="author-block"><sup>3</sup>New York University, <sup>4</sup>University of Washington,</span>
             <span class="author-block"><sup>5</sup>Allen Institute for AI, <sup>6</sup>University of California San-Diego</span>
           </div>
 
@@ -190,13 +190,11 @@
         <div class="content has-text-justified">
           This project introduce <strong>StructChem</strong>, a simple yet effective prompting strategy that offers the desired guidance and substantially boosts the LLMs' chemical reasoning capability.
           
-          <video id="teaser" autoplay muted loop playsinline width="100%">
+          <video id="teaser" autoplay muted loop playsinline width="80%">
             <source src="./static/videos/intro.m4v"
                     type="video/mp4">
           </video>
-          <h2 class="subtitle has-text-centered">
             Large Language Models (LLMs) excel in diverse areas, yet struggle with complex scientific reasoning, especially in the field of chemistry. The errors often stem not from a lack of domain knowledge within the LLMs, but rather from the absence of an effective reasoning structure that guides the LLMs to elicit the right knowledge, incorporate the knowledge in step-by-step reasoning, and iteratively refine results for further improved quality.
-          </h2>
           <!-- <br><br><strong>Project Features</strong>: 
           <ul>
             <li><strong>🚀 Training-Free Methods</strong>
@@ -279,7 +277,7 @@
             </li>
 
             <p align="center">
-              <img src="./static/images/instruction_fr.png" class="center" width="100%">
+              <img src="./static/images/instruction_fr.png" class="center" width="80%">
               </p>
 
             <li><strong>Confidence-based Review-and-Refinement:</strong>
@@ -287,7 +285,7 @@
               <li>The generated formulae and step-by-step reasoning are not always error-free. The cumulative errors in the formulae generation or step-by-step reasoning process can amplify and propagate throughout the entire generation, leading to wrong answers.</li>
               <li>we estimate a confidence score on the revision process. Only a high-confidence revision is accepted for further refinement in the next iteration.itating the cohesive integration of all elements represented by different LoRAs.</li>
               </ul>
-              <video id="teaser" autoplay muted loop playsinline width="100%">
+              <video id="teaser" autoplay muted loop playsinline width="80%">
                 <source src="./static/videos/method.m4v"
                         type="video/mp4">
               </video>
@@ -306,7 +304,7 @@
       <div class="column has-text-centered">
         <h2 class="title is-3">Experimental Results</h2>
         <p align="center">
-        <img src="./static/images/result.png" class="center" width="800%">
+        <img src="./static/images/result.png" class="center" width="80%">
         </p>
         <div class="content has-text-justified">
           <ul>
@@ -336,7 +334,7 @@
       <div class="column has-text-centered">
         <h2 class="title is-3">Analysis</h2>
         <p align="center">
-        <img src="./static/images/ablation.png" class="center" width="70%">
+        <img src="./static/images/ablation.png" class="center" width="80%">
         </p>
         <div class="content has-text-justified">
           <ul>
@@ -345,17 +343,7 @@
           </ul>
         </div>
         <p align="center">
-          <img src="./static/images/switch_analysis.png" class="center" width="70%">
-        </p>
-        <div class="content has-text-justified">
-          <ul>
-            <li>The efficiency of the LoRA Switch improves progressively with increased step size, reaching peak performance at 5.</li>
-            <li>The initial choice of LoRA in the activation sequence clearly influences overall performance, while alterations in the subsequent order have minimal impact.</li>
-            <li>Though PoT helps with precise calculation and improves performance, StructChem without PoT still outperforms the strongest baselines.</li>
-          </ul>
-        </div>
-        <p align="center">
-          <img src="./static/images/error_cost.png" class="center" width="70%">
+          <img src="./static/images/error_cost.png" class="center" width="80%">
         </p>
         <div class="content has-text-justified">
           <ul>
