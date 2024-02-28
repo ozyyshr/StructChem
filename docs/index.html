@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Multi-LoRA Composition for Image Generation</title>
+  <title>Structured Chemistry Reasoning with Large Language Models</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -85,45 +85,40 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Multi-LoRA Composition for Image Generation</h1>
+          <h1 class="title is-1 publication-title">Structured Chemistry Reasoning with Large Language Models</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://maszhongming.github.io">Ming Zhong</a><sup>1</sup>,</span>
+              <a href="https://ozyyshr.github.io">Siru Ouyang</a><sup>1</sup>,</span>
             <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=S6OFEFEAAAAJ&hl=en">Yelong Shen</a><sup>2</sup>,</span>
+              <a href="https://bcmi.sjtu.edu.cn/~zhangzs/">Zhuosheng Zhang</a><sup>2</sup>,</span>
             <span class="author-block">
-              <a href="https://www.microsoft.com/en-us/research/people/shuowa">Shuohang Wang</a><sup>2</sup>,
+              <a href="https://bingyan.me/">Bing Yan</a><sup>3</sup>,
             </span>
             <span class="author-block">
-              <a href="https://adamlu123.github.io">Yadong Lu</a><sup>2</sup>,
+              <a href="https://scholar.google.com/citations?user=XbtWYioAAAAJ&hl=en">Xuan Liu</a><sup>1</sup>,
             </span>
             <span class="author-block">
-              <a href="https://yzjiao.github.io">Yizhu Jiao</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://ozyyshr.github.io">Siru Ouyang</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://plusross.github.io">Donghan Yu</a><sup>2</sup>
+              <a href="https://homes.cs.washington.edu/~yejin/">Yejin Choi</a><sup>4,5</sup>,
             </span>
             <span class="author-block">
               <a href="https://hanj.cs.illinois.edu">Jiawei Han</a><sup>1</sup>
             </span>
             <span class="author-block">
-              <a href="https://www.microsoft.com/en-us/research/people/wzchen">Weizhu Chen</a><sup>2</sup>
+              <a href="https://sites.google.com/view/lianhuiqin/home">Lianhui Qin</a><sup>5,6</sup>
             </span>
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>University of Illinois Urbana-Champaign,</span>
-            <span class="author-block"><sup>2</sup>Microsoft Corporation</span>
+            <span class="author-block"><sup>1</sup>University of Illinois Urbana-Champaign, <sup>2</sup>Shanghai Jiao Tong University</span>
+            <span class="author-block"><sup>3</sup>New York University, <sup>4</sup>University of Washington</span>
+            <span class="author-block"><sup>5</sup>Allen Institute for AI, <sup>6</sup>University of California San-Diego</span>
           </div>
 
           <div class="column has-text-centered">
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2402.16843"
+                <a href="https://arxiv.org/abs/2311.09656"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
@@ -152,7 +147,7 @@
               </span> -->
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/maszhongming/Multi-LoRA-Composition"
+                <a href="https://github.com/ozyyshr/StructChem"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -161,7 +156,7 @@
                   </a>
               </span>
               <!-- Dataset Link. -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="https://drive.google.com/file/d/1SuwRgV1LtEud8dfjftnw-zxBMgzSCwIT/view?usp=sharing"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -169,9 +164,9 @@
                   </span>
                   <span>ComposLoRA</span>
                 </a>
-              </span>
+              </span> -->
               <!-- Twitter Link. -->
-              <span class="link-block">
+              <!-- <span class="link-block">
                 <a href="https://x.com/MingZhong_/status/1762347881812443575?s=20"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
@@ -179,7 +174,7 @@
                   </span>
                   <span>Twitter</span></a>
                   </a>
-              </span>
+              </span> -->
             </div>
 
           </div>
@@ -193,8 +188,16 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
         <div class="content has-text-justified">
-          This project explores new methods for text-to-image generation, with a focus on the integration of multiple Low-Rank Adaptations (LoRAs) to create highly customized and detailed images. We present <strong>LoRA Switch</strong> and <strong>LoRA Composite</strong>, approaches that aim to surpass traditional techniques in terms of accuracy and image quality, especially in complex compositions.
-          <br><br><strong>Project Features</strong>: 
+          This project introduce <strong>StructChem</strong>, a simple yet effective prompting strategy that offers the desired guidance and substantially boosts the LLMs' chemical reasoning capability.
+          
+          <video id="teaser" autoplay muted loop playsinline width="100%">
+            <source src="./static/videos/intro.m4v"
+                    type="video/mp4">
+          </video>
+          <h2 class="subtitle has-text-centered">
+            Large Language Models (LLMs) excel in diverse areas, yet struggle with complex scientific reasoning, especially in the field of chemistry. The errors often stem not from a lack of domain knowledge within the LLMs, but rather from the absence of an effective reasoning structure that guides the LLMs to elicit the right knowledge, incorporate the knowledge in step-by-step reasoning, and iteratively refine results for further improved quality.
+          </h2>
+          <!-- <br><br><strong>Project Features</strong>: 
           <ul>
             <li><strong>🚀 Training-Free Methods</strong>
               <ul>
@@ -227,16 +230,16 @@
               </ul>
             </li>
           </ul>
-         </div>
+         </div> -->
     </div>
   </div>
 </section>
 
-<section class="hero teaser">
+<!-- <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline width="100%">
-        <source src="./static/videos/intro_video_1.mp4"
+      <video id="teaser" autoplay muted loop playsinline width="80%">
+        <source src="./static/videos/method.m4v"
                 type="video/mp4">
       </video>
       <video id="teaser" autoplay muted loop playsinline width="100%">
@@ -248,60 +251,47 @@
       </h2>
     </div>
   </div>
-</section>
+</section> -->
 
 <section class="section">
   <div class="container is-max-desktop">
     <!-- Results. -->
     <div class="columns is-centered">
       <div class="column has-text-centered">
-        <h2 class="title is-3">Methods of Multi-LoRA Composition</h2>
+        <h2 class="title is-3">Methodology</h2>
         <p align="center">
-        <img src="./static/images/method.png" class="center">
-        </p>
+          <img src="./static/images/method_overview.png" class="center" width="100%">
+          </p>
         <div class="content has-text-justified">
           <ul>
-            <li><strong>LoRA Merge:</strong>
+            <li><strong>Formulae Generation:</strong>
               <ul>
-              <li>Prevalent approach to integrating multiple elements in a unified way in an image.</li> 
-              <li>It is realized by linearly combining multiple LoRAs to synthesize a unified LoRA, subsequently plugged into the text-to-image model.</li>
-              <li>LoAR Merge completely overlooks the interaction with the diffusion model during the generative process, resulting in the deformation of the hamburger and fingers in the Figure.</li>
+              <li>Formulae serve as organized and abstracted representations of chemistry knowledge. When humans tackle intricate problems, the initial phase often involves seeking relevant knowledge as a foundation.</li> 
+              <li>LLMs have indeed encoded much chemistry knowledge, it is often effective to elicit the knowledge from the parametric storage.</li>
+              <li>We instruct the LLM not only to recite them but also to provide explanations for the variables they contain.</li>
               </ul>
             </li>
-            <li><strong>LoRA Switch (LoRA-S):</strong>
+            <li><strong>Step-by-step Reasoning:</strong>
               <ul>
-              <li>To explore activating a single LoRA in each denoising step, we propose LoRA Switch.</li>
-              <li>This method introduces a dynamic adaptation mechanism within diffusion models by sequentially activating individual LoRAs at designated intervals throughout the decoding process.</li>
-              <li>As illustrated in the Figure, each LoRA is represented by a unique color corresponding to a specific element, with only one LoRA engaged per denoising step.</li>
+              <li>Grounded on the generated formulae, the LLMs can then reason about the solution to the original question.</li>
+              <li>To induce LLMs for more precise reasoning and calculation processes, we adopt program-of-thoughts (PoT).</li>
               </ul>
             </li>
-            <li><strong>LoRA Composite (LoRA-C):</strong>
-              <ul>
-              <li>To explore incorporating all LoRAs at each timestep without merging weight matrices, we propose LoRA Composite.</li>
-              <li>It involves calculating both unconditional and conditional score estimates for each LoRA individually at each step.</li>
-              <li>By aggregating these scores, the technique ensures balanced guidance throughout the image generation process, facilitating the cohesive integration of all elements represented by different LoRAs.</li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Results. -->
-    <div class="columns is-centered">
-      <div class="column has-text-centered">
-        <h2 class="title is-3">GPT-4V-based Evaluator</h2>
-        <p align="center">
-        <img src="./static/images/gpt4v.png" class="center" width="50%">
-        </p>
-        <div class="content has-text-justified">
-          <ul>
-            <li>While existing metrics can calculate the alignment between text and images, they fall short in assessing the intricacies of specific elements within an image and the quality of their composition.</li>
-            <li>We employ a comparative evaluation method, utilizing GPT-4V to rate generated images across two dimensions: composition quality and image quality.</li>
+            <p align="center">
+              <img src="./static/images/instruction_fr.png" class="center" width="100%">
+              </p>
+
+            <li><strong>Confidence-based Review-and-Refinement:</strong>
+              <ul>
+              <li>The generated formulae and step-by-step reasoning are not always error-free. The cumulative errors in the formulae generation or step-by-step reasoning process can amplify and propagate throughout the entire generation, leading to wrong answers.</li>
+              <li>we estimate a confidence score on the revision process. Only a high-confidence revision is accepted for further refinement in the next iteration.itating the cohesive integration of all elements represented by different LoRAs.</li>
+              </ul>
+              <video id="teaser" autoplay muted loop playsinline width="100%">
+                <source src="./static/videos/method.m4v"
+                        type="video/mp4">
+              </video>
+            </li>
           </ul>
         </div>
       </div>
@@ -316,22 +306,22 @@
       <div class="column has-text-centered">
         <h2 class="title is-3">Experimental Results</h2>
         <p align="center">
-        <img src="./static/images/results.png" class="center" width="100%">
+        <img src="./static/images/result.png" class="center" width="800%">
         </p>
         <div class="content has-text-justified">
           <ul>
-            <li>Our proposed method consistently outperforms LoRA Merge across all configurations and in both dimensions, with the margin of superiority increasing as the number of LoRAs grows.</li>
-            <li>LoRA Switch shows superior performance in composition quality, whereas LoRA Composite excels in image quality.</li>
-            <li>The task of compositional image generation remains highly challenging, especially as the number of elements to be composed increases.</li>
+            <li>Our proposed method consistently outperforms baseline methods by achieving an average of 30% improvement.</li>
+            <li>StructChem works on both GPT-3,5 and GPT-4. The performance improvement on few-shot setting is even larger.</li>
+            <li>StructChem achieves substantial performance gains in complex problems with extensive reasoning steps.</li>
           </ul>
         </div>
         <p align="center">
-          <img src="./static/images/human_eval.png" class="center" width="50%">
+          <img src="./static/images/finetune.png" class="center" width="80%">
         </p>
         <div class="content has-text-justified">
           <ul>
-            <li>Human evaluations aligh with GPT-4V's findings.</li>
-            <li>GPT-4V-based evaluator we adopt shows substantially higher correlations with human judgments, affirming the validity of our evaluation framework.</li>
+            <li>Teach smaller open-sourced models how to reason: (1) Chemistry problems generated by GPT-4 as input; (2) Reasoning processes generated by StructChem as output </li>
+            <li>StructChem achieves huge improvement over baselines, which validates the high quality of our generated reasoning process.</li>
           </ul>
         </div>
       </div>
@@ -346,12 +336,12 @@
       <div class="column has-text-centered">
         <h2 class="title is-3">Analysis</h2>
         <p align="center">
-        <img src="./static/images/style_analysis.png" class="center" width="70%">
+        <img src="./static/images/ablation.png" class="center" width="70%">
         </p>
         <div class="content has-text-justified">
           <ul>
-            <li>LoRA Switch is more adept at composing elements in realistic-style images.</li>
-            <li>LoRA Composite shows a stronger performance in anime-style imagery.</li>
+            <li>Both "structured instruction" and "iterative review and refinement" are significant in contributing to the performance of StructChem for zero-shot and few-shot settings.</li>
+            <li>While iterative refinement indeed contributes to the performance, our strategy of structured instruction is strong enough and demonstrates comparative performance with strong baselines such as CoT.</li>
           </ul>
         </div>
         <p align="center">
@@ -361,15 +351,18 @@
           <ul>
             <li>The efficiency of the LoRA Switch improves progressively with increased step size, reaching peak performance at 5.</li>
             <li>The initial choice of LoRA in the activation sequence clearly influences overall performance, while alterations in the subsequent order have minimal impact.</li>
+            <li>Though PoT helps with precise calculation and improves performance, StructChem without PoT still outperforms the strongest baselines.</li>
           </ul>
         </div>
         <p align="center">
-          <img src="./static/images/bias_analysis.png" class="center" width="70%">
+          <img src="./static/images/error_cost.png" class="center" width="70%">
         </p>
         <div class="content has-text-justified">
           <ul>
-            <li>GPT-4V exhibits significant positional bias in comparative evaluation.</li>
-            <li>This bias varies depending on the input position of the image and the dimension of the evaluation.</li>
+            <li>StructChem are more likely to generate irrelevant formulae than inaccurate ones.</li>
+            <li>Formulae being relevant probably is more important than being correct.</li>
+            <li>Complex reasoning ability is still the bottleneck of LLMs.</li>
+            <li>Preciseness is important for solving complex chemistry problems.</li>
           </ul>
         </div>
       </div>
@@ -380,12 +373,12 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@article{zhong2024multi,
-      title={Multi-LoRA Composition for Image Generation},
-      author={Zhong, Ming and Shen, Yelong and Wang, Shuohang and Lu, Yadong and Jiao, Yizhu and Ouyang, Siru and Yu, Donghan and Han, Jiawei and Chen, Weizhu},
-      journal={arXiv preprint arXiv:2402.16843},
-      year={2024}
-}</code></pre>
+    <pre><code>@article{ouyang2023structured,
+      title={Structured chemistry reasoning with large language models},
+      author={Ouyang, Siru and Zhang, Zhuosheng and Yan, Bing and Liu, Xuan and Han, Jiawei and Qin, Lianhui},
+      journal={arXiv preprint arXiv:2311.09656},
+      year={2023}
+    }</code></pre>
   </div>
 </section>
 
