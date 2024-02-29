@@ -11,7 +11,7 @@
 Large Language Models (LLMs) excel in diverse areas, yet struggle with complex scientific reasoning, especially in the field of chemistry. The errors often stem not from a lack of domain knowledge within the LLMs, but rather from the absence of an effective reasoning structure that guides the LLMs to elicit the right knowledge, incorporate the knowledge in step-by-step reasoning, and iteratively refine results for further improved quality.
 
 <p align="center">
-    <img src="assets/error.png" width="100%" alt="intro_case">
+    <img src="assets/error.png" width="80%" alt="intro_case">
 </p>
 
 We introduce StructChem, a simple yet effective prompting strategy that offers the desired guidance and substantially boosts the LLMs' chemical reasoning capability.
