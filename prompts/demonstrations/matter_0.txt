@@ -1,0 +1,31 @@
+Calculating the maximum wavelength capable of photoejection\r\nA photon of radiation of wavelength $305 \\mathrm{~nm}$ ejects an electron from a metal with a kinetic energy of $1.77 \\mathrm{eV}$. Calculate the maximum wavelength of radiation capable of ejecting an electron from the metal.
+
+**Formulae retrieval:**
+\[ \text{[Formula 1]} Work function formula: \Phi = h\nu - E_k\]
+where:
+\( h \) is Planck's constant, 
+\( \nu \) is the frequency,
+\( E_k \) is the kinetic energy of the ejected electron.
+\[ \text{[Formula 2]} Formula to find the minimum frequency for photoejection: \nu_{\min} = \frac{\Phi}{h} = \frac{h\nu - E_k}{h}\]
+\[ \text{[Formula 3]} Formula to find the maximum wavelength: \lambda_{\max} = \frac{c}{\nu_{\min}} = \frac{c}{\frac{\Phi}{h}} = \frac{c \cdot h}{\Phi} = \frac{c \cdot h}{h\nu - E_k}\]
+where:
+\( c \) is the speed of light.
+
+**Reasoning/calculation process:**
+def solver():
+    import scipy.constants as const
+
+    # Given parameters in [Formula 2] and [Formula 3]
+    E_k = 1.77 * const.electron_volt  # kinetic energy in J
+    lambda_nm = 305  # wavelength in nm
+
+    # Based on [Formula 3], perform calculation
+    E_k_over_hc = E_k / (const.h * const.c)  # energy over hc in m^-1
+    one_over_lambda = 1 / (lambda_nm * 1e-9)  # reciprocal of wavelength in m^-1
+
+    lambda_max = 1 / (one_over_lambda - E_k_over_hc)  # maximum wavelength in m
+
+    print(lambda_max * 1e9)
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[540 $\\mathrm{~nm}$]}.

@@ -2,11 +2,13 @@ from datetime import datetime, timedelta
 import logging
 import time
 import json
+import random
+import argparse
 import os
-
 # from azure.identity import DefaultAzureCredential
 import openai
 from tqdm import tqdm
+
 
 def load_prompt(file):
     prompt = ''
@@ -27,11 +29,7 @@ class GPT4:
         self.engine = engine
         self.partition_id = partition_id
 
-    # def complete(
-    #     self, prompt, max_tokens=5120, temperature=0.0, logprobs=None, n=1,
-    #     frequency_penalty=0, presence_penalty=0, stop=None, rstrip=False,
-    #     partition_id=None, **kwargs
-    # ) -> str:
+
     def complete(self, prompt):
 
         openai.api_base = ""
@@ -190,44 +188,49 @@ def verify_reasoning(problem_statement: str, formula: str, reasoning: str, max_a
     return reasoning, flag
 
 
-def run(file, max_attempts):
+def run(file, max_attempts, base_lm, mode):
 
-    gpt4 = GPT4()
+    gpt4 = GPT4(engine=base_lm)
     prompt = load_prompt("./prompts/instruction.txt")
 
     with open("./scibench/dataset/original/{}.json".format(file)) as f:
         test_data = json.load(f)
 
-    # test_data = ["The vibrational wavenumber of $\\mathrm{Br}_2$ is $323.2 \\mathrm{~cm}^{-1}$. Evaluate the vibrational partition function explicitly (without approximation) and plot its value as a function of temperature. At what temperature is the value within 5 per cent of the value calculated from the approximate formula?", ]
-    
-    for item in test_data:
+    for item in tqdm(test_data):
         problem_text = item['problem_text']
         unit_prob = item['unit']
-
-        problem_text = item
-        unit_prob = 'K'
-
-        problem_statement = prompt + problem_text + " The unit of the answer is " + unit_prob + "."
-
-        feedback_problem = problem_text + " The unit of the answer is " + unit_prob + "."
-
+        new_problem = "\n\n Now try to solve the following problem:\n" + problem_text + " The unit of the answer is " + unit_prob + "."
+        
+        if mode == 'zero-shot':
+            problem_statement = prompt + new_problem
+        elif mode == 'few-shot':
+            # Randomly select three demonstrations
+            txt_files = [file for file in os.listdir("./prompts/demonstrations") if file.endswith('.txt')]
+            random_files = random.sample(txt_files, 3)
+            demonstrations = "" 
+            for demo in random_files:
+                demo_content = load_prompt(os.path.join("./prompts/demonstrations", demo)) + "\n\n"
+                demonstrations += demo_content
+            problem_statement = prompt + "\n\nTo clearly explain the task, we provide the following example:" + demonstrations + new_problem
+        
+        ### 1. First decompose the problem solving process with formulae retrieval and reasoning process
         response = gpt4.complete(prompt=problem_statement)
-
+        ## 1.1 Parse the generated results of formulae and reasoning
         formula_retrieval, reasoning_process = response.split("**Reasoning/calculation process:**")[0], response.split("**Reasoning/calculation process:**")[1]
-
         reasoning_process = "**Reasoning/calculation process:**" + reasoning_process.split("**Answer conclusion:**")[0]
-
+        
+        ### 2. Iterative review and refinement of formulae and reasoning
+        feedback_problem = problem_text + " The unit of the answer is " + unit_prob + "."
         formula_refined, flag_formula = verify_formula(feedback_problem, formula_retrieval, max_attempts)
         reasoning_refined, flag_reasoning = verify_reasoning(feedback_problem, formula_refined, reasoning_process, max_attempts)
 
-
+        ### 3. Conclude the answers
         if flag_formula and flag_reasoning:
             final_response = response
 
         else:
             verified_prompt = load_prompt("./prompts/verified_instruction.txt")
             final_response = gpt4.complete(prompt=verified_prompt+formula_refined+reasoning_refined)
-
 
         cur = {}
         cur['gpt_output'] = final_response
@@ -236,8 +239,17 @@ def run(file, max_attempts):
 
             print(json.dumps(cur, ensure_ascii=False), file=f)
             
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--engine', type=str, default='gpt-4')
+    parser.add_argument('--refine_iteration', type=int, default=5)     
+    parser.add_argument('--dataset', nargs='+', default=["atkins", "chemmc","matter","quan"])
+    parser.add_argument('--mode', type=str, default='zero-shot')
+    args = parser.parse_args()
+    return args
 
 if __name__ == "__main__":
-
-    for f in ['matter', 'atkins', 'chemmc', 'quan']:
-        run(f, max_attempts=5)
+    
+    args = parse_args()
+    for f in args.dataset:
+        run(f, max_attempts=args.refine_iteration, base_lm=args.engine, mode=args.mode)

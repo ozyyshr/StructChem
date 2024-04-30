@@ -1,0 +1,31 @@
+Given that the work function for sodium metal is $2.28 \\mathrm{eV}$, what is the threshold frequency $v_0$ for sodium?
+
+**Formulae retrieval:**
+\[ \text{[Formula 1]} Conversion of energy from electron volts to joules, given by: E(J) = E(eV) \times 1.602 \times 10^{-19} \text{ J/eV} \]
+where:
+\(E(eV)\) is the energy in electron volts,
+\(E(J)\) is the energy in joules.
+\[ \text{[Formula 2]} Calculation of frequency using Planck's constant, given by: \nu = \frac{E}{h}\]
+where: 
+\(\nu\) is the frequency, 
+\(E\) is the energy in joules, 
+\(h\) is Planck's constant \(6.626 \times 10^{-34} \text{ J s}\).
+
+**Reasining/calculation process:**
+def solver():
+
+    # Determine the constants used in [Formula 1] and [Formula 2]
+    eV_to_J = 1.602 * 10**-19  # Conversion factor from eV to J
+    h = 6.626 * 10**-34  # Planck's constant in J*s
+
+    # Using [Formula 1], and convert phi from eV to J
+    phi_eV = 2.28
+    phi_J = phi_eV * eV_to_J
+
+    # Based on [Formula 2], calculate v0 and convert it to 10^14 Hz
+    v0 = phi_J / h / (10**14)
+    print(v0)
+
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[5.51 $10^{14}\\mathrm{~Hz}$]}.

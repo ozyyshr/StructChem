@@ -1,0 +1,30 @@
+Estimate the molar volume of $\\mathrm{CO}_2$ at $500 \\mathrm{~K}$ and 100 atm by treating it as a van der Waals gas.
+
+**Formulae retrieval:**
+\[ \text{[Formula 1]} Conversion of energy from electron volts to joules, given by: E(J) = E(eV) \times 1.602 \times 10^{-19} \text{ J/eV} \]
+where:
+\(E(eV)\) is the energy in electron volts,
+\(E(J)\) is the energy in joules.
+\[ \text{[Formula 2]} Calculation of frequency using Planck's constant, given by: \nu = \frac{E}{h}\]
+where: 
+\(\nu\) is the frequency, 
+\(E\) is the energy in joules, 
+\(h\) is Planck's constant \(6.626 \times 10^{-34} \text{ J s}\).
+
+**Reasining/calculation process:**
+def solver():
+    import numpy as np
+
+    # Coefficients of the polynomial
+    coeff = [1, -0.453, 3.61e-2, -1.55e-3]
+
+    # Using numpy's roots function to solve the polynomial
+    roots = np.roots(coeff)
+
+    # Find the real root that is non-negative and less than 0.410
+    Vm = next(root for root in roots if np.isreal(root) and 0 <= root <= 0.410)
+
+    print(Vm.real)
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[0.366 $\\mathrm{dm}^3 \\mathrm{~mol}^{-1}$]}.

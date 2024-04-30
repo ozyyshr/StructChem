@@ -1,0 +1,33 @@
+Find the bonding and antibonding H\u00fcckel molecular orbitals for ethene.
+
+**Formulae retrieval:**
+\[ \text{[Formula 1]} Momentum of an electron: \( p = m_e \cdot v \) \]
+where:
+\( m_e \) is the Mass of the electron,
+\( v \) is the Velocity of the electron.
+\[ \text{[Formula 2]} De Broglie wavelength: \( \lambda = \frac{h}{p} \) \]
+where:
+\( h \) is Planck's constant,
+\( p \) is the Momentum of the electron.
+
+**Reasoning/calculation process:**
+def solver():
+    # Determine the constants used in [Formula 1] and [Formula 2]
+    c = 2.998 * 10**8  # Speed of light in m/s
+    me = 9.109 * 10**-31  # Mass of an electron in kg
+    h = 6.626 * 10**-34  # Planck's constant in J*s
+    percentage_of_c = 0.01
+
+    # Based on [Formula 1], calculate v
+    v = c * percentage_of_c
+
+    # Similarly based on [Formula 1], calculate p
+    p = me * v
+
+    # With [Formula 2], calculate lambda and convert it to pm
+    lambda_m = h / p
+    lambda_pm = lambda_m * 10**12
+    print(lambda_pm)
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[243 $\\mathrm{pm}$]}.

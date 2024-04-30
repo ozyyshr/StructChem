@@ -1,0 +1,26 @@
+A one-particle, one-dimensional system has $\\Psi=a^{-1 / 2} e^{-|x| / a}$ at $t=0$, where $a=1.0000 \\mathrm{~nm}$. At $t=0$, the particle's position is measured.  (b) Find the probability that the measured value is between $x=0$ and $x=2 \\mathrm{~nm}$.
+
+**Formulae retrieval:**
+\[ \text{[Formula 1]} \text{Pr}(0 \leq x \leq 2 \text{ nm}) = \int_{0}^{2 \text{ nm}} |\Psi|^2 \, dx = \frac{1}{a} \int_{0}^{2 \text{ nm}} e^{-2x/a} \, dx \]
+where:
+\( \Psi|^2 \) is the probability density function.
+
+**Reasoning/calculation process:**
+def solver():
+    from scipy.integrate import quad
+    import numpy as np
+
+    # Define the integrand function
+    def integrand(x):
+        a = 1  # substitute with actual value if given
+        return np.exp(-2 * x / a)
+
+    # Perform the integration using [Formula 1]
+    result, _ = quad(integrand, 0, 2)  # the limits of integration are 0 and 2
+    result *= 1  # substitute with actual value of a^-1 if given
+    result = -0.5 * (np.exp(-4) - 1)
+
+    print(result)
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[0.4908]}.

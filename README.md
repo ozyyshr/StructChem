@@ -6,6 +6,12 @@
 
 🖋 **Authors:** [Siru Ouyang](https://ozyyshr.github.io/), [Zhuosheng Zhang](https://bcmi.sjtu.edu.cn/~zhangzs/), [Bing Yan](https://bingyan.me/), [Xuan Liu](https://scholar.google.com/citations?user=XbtWYioAAAAJ&hl=en), [Yejin Choi](https://yzjiao.github.io/), [Yejin Choi](https://homes.cs.washington.edu/~yejin/), [Jiawei Han](https://hanj.cs.illinois.edu/), [Lianhui Qin](https://sites.google.com/view/lianhuiqin/home)
 
+## 🆕 News
+
+We have integrated StructChem into [llm-reasoners](https://github.com/maitrix-org/llm-reasoners/tree/main/examples/StructChem). 
+
+Try it out!
+
 ## 📜 Overview
 
 Large Language Models (LLMs) excel in diverse areas, yet struggle with complex scientific reasoning, especially in the field of chemistry. The errors often stem not from a lack of domain knowledge within the LLMs, but rather from the absence of an effective reasoning structure that guides the LLMs to elicit the right knowledge, incorporate the knowledge in step-by-step reasoning, and iteratively refine results for further improved quality.

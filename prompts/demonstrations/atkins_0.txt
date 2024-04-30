@@ -1,0 +1,26 @@
+The change in molar internal energy when $\\mathrm{CaCO}_3(\\mathrm{~s})$ as calcite converts to another form, aragonite, is $+0.21 \\mathrm{~kJ} \\mathrm{~mol}^{-1}$. Calculate the difference between the molar enthalpy and internal energy changes when the pressure is 1.0 bar given that the densities of the polymorphs are $2.71 \\mathrm{~g} \\mathrm{~cm}^{-3}$ and $2.93 \\mathrm{~g} \\mathrm{~cm}^{-3}$, respectively.
+
+**Formulae retrieval:**
+\[ \text{[Formula 1]} The enthalpy change for a transition is given by: \Delta H_m = H_m(\text{aragonite}) - H_m(\text{calcite}) = \{U_m(a) + pV_m(a)\} - \{U_m(c) + pV_m(c)\} = \Delta U_m + p(V_m(a) - V_m(c))\]
+where:
+\( U_m \) represents the internal energy per mole, 
+\( V_m \) is the molar volume, 
+\( p \) is the pressure.
+
+**Reasining/calculation process:**
+def solver():
+
+    # From the problem, we first determine the constants for the parameters
+    p = 1.0e5  
+    M = 100  
+    rho_a = 2.93  
+    rho_c = 2.71  
+
+    # Calculate based on [Formula 1]
+    deltaHm_minus_deltaUm = p * M * ((1/rho_a) - (1/rho_c))
+    deltaHm_minus_deltaUm = deltaHm_minus_deltaUm * 1e-6
+
+    print(deltaHm_minus_deltaUm) 
+
+**Answer conclusion:**
+[answer] The answer is therefore \\boxed{[-0.28 $\\mathrm{~Pa} \\mathrm{~m}^3 \\mathrm{~mol}^{-1}$]}.
