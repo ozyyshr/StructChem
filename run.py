@@ -3,10 +3,14 @@ import logging
 import time
 import json
 import random
+import re
+import io
 import argparse
 import os
+from prompts.refine_prompt import refine_formulae_prompt, refine_reasoning_prompt
 # from azure.identity import DefaultAzureCredential
 import openai
+from openai import OpenAI
 from tqdm import tqdm
 
 
@@ -20,23 +24,22 @@ def load_prompt(file):
 class GPT4:
 
     def __init__(self, max_tokens=1024, temperature=0.0, logprobs=None, n=1, engine='gpt-4',
-        frequency_penalty=0, presence_penalty=0, stop=None, rstrip=False,
-        partition_id=None, **kwargs):
+        frequency_penalty=0, presence_penalty=0, stop=None, rstrip=False, **kwargs):
 
         self.max_tokens = max_tokens
         self.temperature = temperature
         self.rstrip = rstrip
         self.engine = engine
-        self.partition_id = partition_id
+        self.client = OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY", None),
+        )
 
 
     def complete(self, prompt):
 
-        openai.api_base = ""
         openai.api_version = '2023-03-15-preview'
-        openai.api_key = ""
-        openai.api_type = "azure"
         self.deployment_id = self.engine
+        
         if self.rstrip:
             # Remove heading whitespaces improves generation stability. It is
             # disabled by default to keep consistency.
@@ -45,15 +48,8 @@ class GPT4:
 
         while True:
             try:
-                # Partition ID should only be set explictly when requests can
-                # utilize server side cache. Caching helps reduce computational
-                # cost for prompts with similar content. You may manually
-                # assign the same partition ID to similar prompts.
-                if not self.partition_id:
-                    # Requests will be routed in round robin by default.
-                    partition_id = f"sumscience-{datetime.now()}"
-                response = openai.ChatCompletion.create(
-                    engine=self.deployment_id,
+                response = self.client.chat.completions.create(
+                    model=self.deployment_id,
                     messages=[
                         {"role": "system", "content": "You are an expert chemist. Your expertise lies in reasoning and addressing chemistry problems. "},
                         {
@@ -63,18 +59,10 @@ class GPT4:
                     ],
                     temperature = self.temperature,
                     max_tokens = self.max_tokens,
-                    # top_p=1,  # Not recommended to change with temperature
-                    # frequency_penalty=frequency_penalty,
-                    # presence_penalty=presence_penalty,
-                    # logprobs=logprobs,
-                    # n=n,
-                    # stop=stop,
-                    headers={"partition-id": partition_id},
-                    # **kwargs,
                 )
-                return response["choices"][0]["message"]["content"]
+                return response.choices[0].message.content
             
-            except openai.error.RateLimitError as e:
+            except openai.RateLimitError as e:
                 # NOTE: openai.error.RateLimitError: Requests to the
                 # Deployments_Completion Operation under OpenAI API have
                 # exceeded rate limit of your current OpenAI S0 pricing tier.
@@ -86,96 +74,91 @@ class GPT4:
                 time.sleep(max(4, 0.5 * (2 ** retry_interval_exp)))
                 retry_interval_exp += 1
 
-            except openai.error.APIConnectionError as e:
+            except openai.APIConnectionError as e:
                 logging.warning("OpenAI API connection error. Retry")
                 time.sleep(max(4, 0.5 * (2 ** retry_interval_exp)))
                 retry_interval_exp += 1
 
-            except openai.error.Timeout as e:
-                logging.warning("OpenAI timeout error. Sleep then retry.")
-                time.sleep(max(4, 0.5 * (2 ** retry_interval_exp)))
-                retry_interval_exp += 1
+            # except openai.Timeout as e:
+            #     logging.warning("OpenAI timeout error. Sleep then retry.")
+            #     time.sleep(max(4, 0.5 * (2 ** retry_interval_exp)))
+            #     retry_interval_exp += 1
 
 
-def verify_formula(problem_statement: str, answer: str, max_attempts: int) -> str:
-
+def verify_formula(problem_statement: str, formulae: str, max_attempts: int) -> str:
     gpt = GPT4()
-
-    feedback_prompt = '# You are provided with a chemistry problem and a **Formula retrieval** process for solving the problem. Review the retireved formula and find any problems in it. Justify your answer with a confidence score in the scale of [0,1].'
-
-    feedback_example = load_prompt("./prompts/feedback_formula.txt")
+    formulae_retrieved = formulae
 
     def is_refinement_sufficient(prompt, feedback, initial, refined) -> bool:
         # Define stopping criteria here
         pass
 
-    # answer = gpt.complete(prompt)
     flag = True
 
     n_attempts = 0
-    max_confidence = 0
+    max_confidence = 0.0
 
     while n_attempts < max_attempts:
-
-        feedback_prompt = feedback_prompt + feedback_example + "# chemistry problem:\n" + problem_statement + "\n# formula retrieval results:\n" + answer
-        feedback = gpt.complete(feedback_prompt)
         
-        # if is_refinement_sufficient(prompt, feedback, answer, refined):
-        #     break
-        # if "correct" in feedback:
-        #     break
+        with io.StringIO() as f:
+            f.write(refine_formulae_prompt.strip() + "\n\n")
+            f.write("Now try the following. Remember to strictly follow the output format:\n\n")
+            f.write(f"### Chemistry problem:###\n {problem_statement}\n\n### Formulae retrieval:###\n{formulae_retrieved}")
+            model_input = f.getvalue()
 
-        answer_new = feedback.lstrip("# Here is the correct formula:")
-        answer_new, confidence = answer_new.split("**Confidence score:**")
-        confidence = int(confidence.strip())
+        refined_formulae = gpt.complete(model_input)
 
-        if confidence > max_confidence:
-            max_confidence = confidence
-            answer = answer_new
+        formulae_new, conf_f = refined_formulae.split("**Confidence score:**")[0].strip("\n"), refined_formulae.split("**Confidence score:**")[1].strip()
+        
+        # extract the confidence score and the refined components
+        conf = float(re.findall(r"\d+\.?\d*", conf_f)[0])
+        formulae_new = "**Formula retrieval:**" + formulae_new.split("**Formula retrieval:**")[1]
+
+
+        if conf > max_confidence:
+            max_confidence = conf
+            formulae = formulae_new
         else:
-            answer = answer
+            formulae = formulae
 
         n_attempts += 1
 
     if n_attempts > 0 :
         flag = False
 
-    return answer, flag
+    return formulae, flag
 
 def verify_reasoning(problem_statement: str, formula: str, reasoning: str, max_attempts: int) -> str:
 
     gpt = GPT4()
 
-    feedback_prompt = '# You are provided with a chemistry problem and a **Reasoning/calculation process** for solving the problem based on the given **Formula retrieval**. Review the reasoning/calculation process step by step and find any problems in it. Justify your answer with a confidence score in the scale of [0,1].'
-
-    feedback_example = load_prompt("./prompts/feedback_reasoning.txt")
-
     def is_refinement_sufficient(prompt, feedback, initial, refined) -> bool:
         # Define stopping criteria here
         pass
 
-    # answer = gpt.complete(prompt)
     flag = True
 
     n_attempts = 0
-    max_confidence = 0
+    max_confidence = 0.0
 
     while n_attempts < max_attempts:
 
-        feedback_prompt = feedback_prompt + feedback_example + "# chemistry problem:\n" + problem_statement + "# solution:\n" + formula + "\n" + reasoning
-        feedback = gpt.complete(feedback_prompt)
+        with io.StringIO() as f:
+            f.write(refine_reasoning_prompt.strip() + "\n\n")
+            f.write("Now try the following. Remember to strictly follow the output format:\n\n")
+            f.write(f"### Chemistry problem:###\n {problem_statement}\n\n### Formulae retrieval:###\n{formula}\n\n###Reasoning process###\n{reasoning}")
+            model_input = f.getvalue()
+        
+        refined_reasoning = gpt.complete(model_input)
 
-        # if is_refinement_sufficient(prompt, feedback, answer, refined):
-        #     break
-        # if "correct" in feedback:
-        #     break
+        reasoning_new, conf_f = refined_reasoning.split("**Confidence score:**")[0].strip("\n"), refined_reasoning.split("**Confidence score:**")[1].strip()
 
-        reasoning_new = feedback.lstrip("# Here is the correct reasoning process:")
-        reasoning_new, confidence = reasoning_new.split("**Confidence score:**")
-        confidence = int(confidence.strip())
+        # extract the confidence score and the refined components
+        conf = float(re.findall(r"\d+\.?\d*", conf_f)[0])
+        reasoning_new = "**Reasoning/calculation process:**" + reasoning_new.split("**Reasoning/calculation process:**")[1]
 
-        if confidence > max_confidence:
-            max_confidence = confidence
+        if conf > max_confidence:
+            max_confidence = conf
             reasoning = reasoning_new
         else:
             reasoning = reasoning
@@ -193,7 +176,7 @@ def run(file, max_attempts, base_lm, mode):
     gpt4 = GPT4(engine=base_lm)
     prompt = load_prompt("./prompts/instruction.txt")
 
-    with open("./scibench/dataset/original/{}.json".format(file)) as f:
+    with open("./datasets/{}.json".format(file)) as f:
         test_data = json.load(f)
 
     for item in tqdm(test_data):
