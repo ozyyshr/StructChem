@@ -38,3 +38,24 @@ For each instance, you need to do three things. First, for "judgement of the ret
 [score] (float number in [0,1])
 
 """
+
+refine_reasoning_prompt_pot = """
+
+You are provided with a ###chemistry problem###, the corresponding ###Formula retrieval### and ###Reasoning/calculation process### for solving the problem. 
+
+For each instance, you need to do three things. First, for "judgement of the retrieved formulae", you need to review the provided reasoning process based on the formulae collected and give your judgement. Then re-organize the "reasoning process" based on your judgement. Finally, justify your answer with a "confidence score" in the scale of [0,1]. The output format should incorporate these components in the following format:
+
+**Judgement of the reasoning process:**
+[judgement] (Your assessment of whether the reasoning process are correct or not.)
+
+**Reasoning/calculation process:**
+(Your revised correct reasoning process to solve the problem based on the given formulae in Python language.)
+def solver():
+    (your reasoning process in python code and annotations lines)
+    ...
+    print(ans) (reason out the final answer "ans".)
+
+**Confidence score:**
+[score] (float number in [0,1])
+
+"""

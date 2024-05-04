@@ -5,9 +5,11 @@ import json
 import random
 import re
 import io
+import sys
+from instruction import overall_instruction, overall_instruction_pot
 import argparse
 import os
-from prompts.refine_prompt import refine_formulae_prompt, refine_reasoning_prompt
+from prompts.refine_prompt import refine_formulae_prompt, refine_reasoning_prompt, refine_reasoning_prompt_pot
 # from azure.identity import DefaultAzureCredential
 import openai
 from openai import OpenAI
@@ -128,7 +130,7 @@ def verify_formula(problem_statement: str, formulae: str, max_attempts: int) -> 
 
     return formulae, flag
 
-def verify_reasoning(problem_statement: str, formula: str, reasoning: str, max_attempts: int) -> str:
+def verify_reasoning(problem_statement: str, formula: str, reasoning: str, max_attempts: int, pot: bool) -> str:
 
     gpt = GPT4()
 
@@ -140,6 +142,9 @@ def verify_reasoning(problem_statement: str, formula: str, reasoning: str, max_a
 
     n_attempts = 0
     max_confidence = 0.0
+
+    if pot:
+        refine_reasoning_prompt = refine_formulae_prompt_pot
 
     while n_attempts < max_attempts:
 
@@ -171,10 +176,14 @@ def verify_reasoning(problem_statement: str, formula: str, reasoning: str, max_a
     return reasoning, flag
 
 
-def run(file, max_attempts, base_lm, mode):
+def run(file, max_attempts, base_lm, mode, pot):
 
     gpt4 = GPT4(engine=base_lm)
-    prompt = load_prompt("./prompts/instruction.txt")
+    if pot:
+        prompt = overall_instruction_pot
+    else:
+        prompt = overall_instruction
+    # prompt = load_prompt("./prompts/instruction.txt")
 
     with open("./datasets/{}.json".format(file)) as f:
         test_data = json.load(f)
@@ -205,15 +214,25 @@ def run(file, max_attempts, base_lm, mode):
         ### 2. Iterative review and refinement of formulae and reasoning
         feedback_problem = problem_text + " The unit of the answer is " + unit_prob + "."
         formula_refined, flag_formula = verify_formula(feedback_problem, formula_retrieval, max_attempts)
-        reasoning_refined, flag_reasoning = verify_reasoning(feedback_problem, formula_refined, reasoning_process, max_attempts)
+        reasoning_refined, flag_reasoning = verify_reasoning(feedback_problem, formula_refined, reasoning_process, max_attempts, pot)
 
         ### 3. Conclude the answers
-        if flag_formula and flag_reasoning:
-            final_response = response
-
+        if not pot:
+            if flag_formula and flag_reasoning:
+                final_response = response
+            else:
+                verified_prompt = load_prompt("./prompts/verified_instruction.txt")
+                final_response = gpt4.complete(prompt=verified_prompt+formula_refined+reasoning_refined)
         else:
-            verified_prompt = load_prompt("./prompts/verified_instruction.txt")
-            final_response = gpt4.complete(prompt=verified_prompt+formula_refined+reasoning_refined)
+            old_stdout = sys.stdout
+            redirected_output = sys.stdout = StringIO()
+            try:
+                reasoning_pot = reasoning_refined.split("**Reasoning/calculation process:**")[1]
+                exec(reasoning_pot)
+                sys.stdout = old_stdout
+                final_response = redirected_output.getvalue().strip()
+            except:
+                final_response = "None"
 
         cur = {}
         cur['gpt_output'] = final_response
@@ -228,6 +247,7 @@ def parse_args():
     parser.add_argument('--refine_iteration', type=int, default=5)     
     parser.add_argument('--dataset', nargs='+', default=["atkins", "chemmc","matter","quan"])
     parser.add_argument('--mode', type=str, default='zero-shot')
+    parser.add_argument('--pot', action='store_true')
     args = parser.parse_args()
     return args
 
@@ -235,4 +255,4 @@ if __name__ == "__main__":
     
     args = parse_args()
     for f in args.dataset:
-        run(f, max_attempts=args.refine_iteration, base_lm=args.engine, mode=args.mode)
+        run(f, max_attempts=args.refine_iteration, base_lm=args.engine, mode=args.mode, pot=args.pot)
